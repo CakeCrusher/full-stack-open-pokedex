@@ -36,11 +36,11 @@ jobs:
           heroku_email: "1sebastiansosa1@gmail.com"
           healthcheck: "https://cakecrusher-pokedex.herokuapp.com/health"
           rollbackonhealthcheckfailed: true
-      - name: Notify slack of success
+      - name: Notify slack of failure
         uses: innocarpe/actions-slack@v1
         if: ${{ !success() }}
         with:
-          status: ${{ jobs.simple_deployment_pipeline.status }}
+          status: ${{ job.status }}
           failure_text: "Failed to build on heroku"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
