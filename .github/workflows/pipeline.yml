@@ -39,7 +39,7 @@ jobs:
       - uses: innocarpe/actions-slack@v1
         if: ${{ !success() }}
         with:
-          status: ${{ jobs.simple_deployment_pipeline.status }}
+          status: ${{ jobs.<job_id>.status }}
           failure_text: "Failed to build on heroku"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
