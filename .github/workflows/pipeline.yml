@@ -36,7 +36,8 @@ jobs:
           heroku_email: "1sebastiansosa1@gmail.com"
           healthcheck: "https://cakecrusher-pokedex.herokuapp.com/health"
           rollbackonhealthcheckfailed: true
-      - uses: innocarpe/actions-slack@v1
+      - name: Notify slack of success
+        uses: innocarpe/actions-slack@v1
         if: ${{ !success() }}
         with:
           status: ${{ jobs.<job_id>.status }}
@@ -51,7 +52,8 @@ jobs:
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       #     DEFAULT_BUMP: patch
-      - uses: innocarpe/actions-slack@v1
+      - name: Notify slack of success
+        uses: innocarpe/actions-slack@v1
         if: ${{ success() }}
         with:
           status: ${{ jobs.simple_deployment_pipeline.status }}
