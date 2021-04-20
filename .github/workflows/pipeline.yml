@@ -56,7 +56,7 @@ jobs:
         uses: innocarpe/actions-slack@v1
         if: ${{ success() }}
         with:
-          status: ${{ jobs.simple_deployment_pipeline.status }}
+          status: ${{ job.status }}
           success_text: "Successfully deployed"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
