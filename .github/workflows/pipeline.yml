@@ -37,18 +37,20 @@ jobs:
           heroku_email: "1sebastiansosa1@gmail.com"
           healthcheck: "https://cakecrusher-pokedex.herokuapp.com/health"
           rollbackonhealthcheckfailed: true
-      - name: job status
-        env:
-          JOB_STATUS: ${{ job.status }}
-        run: echo "$JOB_STATUS"
       - name: Notify slack of failure
-        uses: innocarpe/actions-slack@v1
         if: ${{ !success() }}
+        uses: 8398a7/action-slack@v3
         with:
-          status: ${{ job.status }}
-          failure_text: "Failed to build on heroku"
+          status: custom
+          fields: workflow,job,commit,repo
+          custom_payload: |
+          {
+            attachments: [{
+              color: "danger",
+              text: `${process.env.AS_WORKFLOW}\n${process.env.AS_JOB} (${process.env.AS_COMMIT}) of ${process.env.AS_REPO} failed to deploy`,
+            }]
+          }
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       # - uses: actions/checkout@v2
       # - name: Bump version and push tag
@@ -58,13 +60,19 @@ jobs:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       #     DEFAULT_BUMP: patch
       - name: Notify slack of success
-        uses: innocarpe/actions-slack@v1
         if: ${{ success() }}
+        uses: 8398a7/action-slack@v3
         with:
-          status: ${{ job.status }}
-          success_text: "Successfully deployed"
+          status: custom
+          fields: workflow,job,commit,repo
+          custom_payload: |
+          {
+            attachments: [{
+              color: "good",
+              text: `${process.env.AS_WORKFLOW}\n${process.env.AS_JOB} (${process.env.AS_COMMIT}) of ${process.env.AS_REPO} passed and merged`,
+            }]
+          }
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           
 
